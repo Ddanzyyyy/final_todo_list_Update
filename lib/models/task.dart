@@ -7,7 +7,7 @@ class Task {
   String priority;
   DateTime dueDate;
   bool isCompleted;
-  bool isDeleted; // Tambahkan properti isDeleted
+  bool isDeleted; 
   Color? priorityColor;
 
   Task({
@@ -17,7 +17,7 @@ class Task {
     required this.priority,
     required this.dueDate,
     this.isCompleted = false,
-    this.isDeleted = false, // Inisialisasi default ke false
+    this.isDeleted = false, 
     this.priorityColor,
   });
 
@@ -39,7 +39,7 @@ class Task {
       'priority': priority,
       'dueDate': dueDate.toIso8601String(),
       'isCompleted': isCompleted ? 1 : 0,
-      'isDeleted': isDeleted ? 1 : 0, // Tambahkan isDeleted ke map
+      'isDeleted': isDeleted ? 1 : 0, 
       'priorityColor': _colorToString(priorityColor),
     };
   }

@@ -27,7 +27,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/New notifications.gif
+    - assets/images/Profile Interface.gif
+    - assets/images/Mobile inbox.gif
+    - assets/images/active_task.png
+    - assets/images/tasks.png
+    - assets/images/5orang.jpg
+    - assets/images/searchicon.png
 
-assets:
-    - assets/images/logo.jpeg
+
+
 
