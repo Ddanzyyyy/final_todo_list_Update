@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:to_do_list_app/main.dart';
-// import 'package:to_do_list_app/screens/to_do_list_screen.dart'; 
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -32,16 +31,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _nextPage() {
     if (_currentPage < _onboardingData.length - 1) {
-      // Pindah ke halaman berikutnya jika belum di halaman terakhir
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
     } else {
-      // Alihkan ke halaman utama
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ToDoListScreen()), // Arahkan ke ToDoListScreen
+        MaterialPageRoute(builder: (context) => ToDoListScreen()),
       );
     }
   }
@@ -49,12 +46,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Menetapkan latar belakang menjadi putih
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: PageView.builder(
+                physics: NeverScrollableScrollPhysics(), // Disable page swipe
                 controller: _pageController,
                 itemCount: _onboardingData.length,
                 onPageChanged: (int index) {

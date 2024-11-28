@@ -9,7 +9,6 @@ import 'package:to_do_list_app/widgets/custom_fab_menu.dart';
 // import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'providers/task_provider.dart';
-// import 'package:to_do_list_app/notification_service.dart';
 
 void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
