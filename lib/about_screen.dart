@@ -198,7 +198,7 @@ class _AboutScreenState extends State<AboutScreen>
 
   Widget _buildInfoCard(String text, {IconData? icon}) {
     return Card(
-      elevation: 8, // Meningkatkan elevasi untuk efek bayangan
+      elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -323,7 +323,7 @@ class _AboutScreenState extends State<AboutScreen>
     ];
 
     return Card(
-      elevation: 8, // Meningkatkan elevasi untuk efek bayangan
+      elevation: 8, 
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list_app/main.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
+
+  static isFirstTime() {}
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
@@ -29,6 +32,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
   ];
 
+  // Static method to check if this is the first time the app is opened
+  static Future<bool> isFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? firstTime = prefs.getBool('first_time');
+    
+    if (firstTime == null) {
+      await prefs.setBool('first_time', false);
+      return true;
+    }
+    return false;
+  }
+
   void _nextPage() {
     if (_currentPage < _onboardingData.length - 1) {
       _pageController.nextPage(
@@ -52,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           children: [
             Expanded(
               child: PageView.builder(
-                physics: NeverScrollableScrollPhysics(), // Disable page swipe
+                physics: NeverScrollableScrollPhysics(),
                 controller: _pageController,
                 itemCount: _onboardingData.length,
                 onPageChanged: (int index) {

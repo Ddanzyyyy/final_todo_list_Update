@@ -194,7 +194,7 @@ class _BinScreenState extends State<BinScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildTaskCard(BuildContext context, Task task, TaskProvider taskProvider, int index) {
-  final double startTime = (index * 0.1).clamp(0.0, 1.0); // Pastikan berada dalam rentang 0.0 hingga 1.0
+  final double startTime = (index * 0.1).clamp(0.0, 1.0);
   return AnimatedBuilder(
     animation: _fadeController,
     builder: (context, child) {
@@ -206,7 +206,7 @@ class _BinScreenState extends State<BinScreen> with TickerProviderStateMixin {
           CurvedAnimation(
             parent: _fadeController,
             curve: Interval(
-              startTime,  // Gunakan startTime yang sudah dibatasi
+              startTime, 
               1.0,
               curve: Curves.easeOutQuart,
             ),

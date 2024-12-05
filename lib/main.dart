@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list_app/about_screen.dart';
 import 'package:to_do_list_app/models/task.dart';
 import 'package:to_do_list_app/screens/bin_screen.dart';
@@ -31,9 +32,59 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.poppinsTextTheme(),
         ),
         debugShowCheckedModeBanner: false,
-        home: OnboardingScreen(),
+        home: AppInitializer(),
       ),
     );
+  }
+}
+
+class AppInitializer extends StatefulWidget {
+  const AppInitializer({super.key});
+
+  @override
+  _AppInitializerState createState() => _AppInitializerState();
+}
+
+class _AppInitializerState extends State<AppInitializer> {
+  bool? _isFirstTime;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstTime();
+  }
+
+  Future<void> _checkFirstTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    // Periksa apakah ini pertama kali aplikasi dibuka
+    bool isFirstTime = prefs.getBool('first_time_open') ?? true;
+    
+    if (isFirstTime) {
+      // Tandai bahwa aplikasi sudah pernah dibuka
+      await prefs.setBool('first_time_open', false);
+    }
+
+    setState(() {
+      _isFirstTime = isFirstTime;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Tampilkan loading indicator selama memeriksa status pertama kali
+    if (_isFirstTime == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    // Jika memang pertama kali, tampilkan OnboardingScreen
+    return _isFirstTime == true 
+      ? OnboardingScreen() 
+      : const ToDoListScreen();
   }
 }
 
@@ -114,7 +165,7 @@ Widget build(BuildContext context) {
                   hintStyle: const TextStyle(color: Colors.white70),
                   border: InputBorder.none,
                   prefixIcon: Padding(
-                    padding: const EdgeInsets.all(8.0), // Menambahkan padding jika diperlukan
+                    padding: const EdgeInsets.all(8.0),
                     child: Image.asset(
                       'assets/images/searchicon.png', // Ganti dengan path gambar aset yang sesuai
                       width: 24, // Sesuaikan ukuran jika diperlukan
@@ -324,22 +375,21 @@ Widget _buildEmptyState(bool isCompleted, bool isSearching) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Menambahkan ikon aset untuk "Belum ada tugas yang diselesaikan" dan "Belum ada tugas aktif"
         if (isCompleted)
           Padding(
-            padding: const EdgeInsets.only(bottom: 16.0), // Menambahkan jarak di bawah ikon
+            padding: const EdgeInsets.only(bottom: 16.0),
             child: Image.asset(
-              'assets/images/active_task.png', // Ganti dengan path ikon aset yang sesuai
-              width: 64, // Sesuaikan ukuran jika diperlukan
+              'assets/images/active_task.png', 
+              width: 64,
               height: 64,
             ),
           ),
         if (!isCompleted)
           Padding(
-            padding: const EdgeInsets.only(bottom: 16.0), // Menambahkan jarak di bawah ikon
+            padding: const EdgeInsets.only(bottom: 16.0), 
             child: Image.asset(
-              'assets/images/tasks.png', // Ganti dengan path ikon aset yang sesuai
-              width: 64, // Sesuaikan ukuran jika diperlukan
+              'assets/images/tasks.png', 
+              width: 64, 
               height: 64,
             ),
           ),
@@ -781,7 +831,7 @@ Widget _buildTaskContent(Task task) {
         ),
       ),
       const SizedBox(height: 8),
-      _buildPriorityBadge(task), // Badge untuk prioritas
+      _buildPriorityBadge(task),
       const SizedBox(height: 8),
       Text(
         task.description,
@@ -892,8 +942,6 @@ Widget buildFloatingActionButton(BuildContext context) {
 }
 
 
-
-
   void _showDeleteConfirmation(BuildContext context, Task task, TaskProvider taskProvider) {
     showDialog(
       context: context,
@@ -945,8 +993,6 @@ Widget buildFloatingActionButton(BuildContext context) {
       ),
     );
   }
-
-
 
   void _showTaskForm(BuildContext context, Task? task, int? index) {
   final titleController = TextEditingController(text: task?.title);
@@ -1350,41 +1396,40 @@ Widget buildFloatingActionButton(BuildContext context) {
                                         }
                                       }
 
-                                Navigator.of(context).pop();
-
-                                // Show success message
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      task == null
-                                          ? 'Tugas berhasil ditambahkan'
-                                          : 'Tugas berhasil diperbarui',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    backgroundColor: Colors.green,
-                                    behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Text(
-                                      'Semua kolom harus diisi',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    backgroundColor: Colors.red,
-                                    behavior: SnackBarBehavior.floating,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
+                                      Navigator.of(context).pop();
+                                      // Show success message
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            task == null
+                                                ? 'Tugas berhasil ditambahkan'
+                                                : 'Tugas berhasil diperbarui',
+                                            style:
+                                                const TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.green,
+                                          behavior: SnackBarBehavior.floating,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: const Text(
+                                            'Semua kolom harus diisi',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                          behavior: SnackBarBehavior.floating,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
                                   child: Text(
                                     task == null ? 'Tambah Tugas' : 'Simpan',
                                     style: const TextStyle(
@@ -1400,14 +1445,14 @@ Widget buildFloatingActionButton(BuildContext context) {
                       ),
                     ),
                   ],
-                  )
                 )
-              ),
-            );          
-          },
-        );
-      },
-    );
-  }
-    }
+              )
+            ),
+          );          
+        },
+      );
+    },
+  );
+}
+}
 
